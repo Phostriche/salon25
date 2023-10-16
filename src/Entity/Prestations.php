@@ -2,27 +2,42 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use App\Repository\PrestationsRepository;
+use ApiPlatform\Metadata\Get;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use App\Repository\PrestationsRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PrestationsRepository::class)]
-#[ApiResource]
+
+#[ApiResource(
+        operations: [
+            new Get(normalizationContext: ['groups' => 'prestations:item']),
+            new GetCollection(normalizationContext: ['groups' => 'prestations:list'])
+        ],
+       
+        paginationEnabled: false,
+    )]
 class Prestations
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+    #[Groups(['prestations:list', 'prestations:item'])]
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $typeA = null;
+    #[Groups(['prestations:list', 'prestations:item'])]
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
+    #[Groups(['prestations:list', 'prestations:item'])]
 
     #[ORM\Column]
     private ?float $prix = null;
+    #[Groups(['prestations:list', 'prestations:item'])]
 
     public function getId(): ?int
     {

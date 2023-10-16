@@ -2,46 +2,61 @@
 
 namespace App\Entity;
 
+
+use ApiPlatform\Metadata\Get;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ProduitsRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'produits:item']),
+        new GetCollection(normalizationContext: ['groups' => 'produits:list'])
+    ],
+   
+    paginationEnabled: false,
+)]
 class Produits
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+   
     private ?int $id = null;
+    #[Groups(['produits:list', 'produits:item'])]
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $codeBarre = null;
+    #[Groups(['produits:list', 'produits:item'])]
 
     #[ORM\Column(length: 255, nullable: false)]
     private ?string $nom = null;
+    #[Groups(['produits:list', 'produits:item'])]
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $typeA = null;
-
+    #[Groups(['produits:list', 'produits:item'])]
     #[ORM\Column(length: 50)]
     private ?string $ligne = null;
-
+    #[Groups(['produits:list', 'produits:item'])]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $sousFamille = null;
-
+    #[Groups(['produits:list', 'produits:item'])]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $COND = null;
-
+    #[Groups(['produits:list', 'produits:item'])]
     #[ORM\Column]
     private ?float $prixAchat = null;
-
+    #[Groups(['produits:list', 'produits:item'])]
     #[ORM\Column]
     private ?float $prixVente = null;
-
+    #[Groups(['produits:list', 'produits:item'])]
     #[ORM\Column]
     private ?int $stock = null;
-
+    #[Groups(['produits:list', 'produits:item'])]
     public function getId(): ?int
     {
         return $this->id;
