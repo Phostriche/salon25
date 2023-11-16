@@ -5,8 +5,8 @@ const produits = ref([]);
 const prestations = ref(['']);
 const selected= ref([]);
 const ticket = reactive([]);
-var index = 0;
-  
+var i = 0;
+
   fetch
 ('/api/produits.json')
   .then(response => response.json())
@@ -22,14 +22,11 @@ fetch
     .then(data => prestations.value = data);
     
 
-    function mettreDansTicket() {
+    function mettreDansTicket(ligne) {
       
+        ticket.push(ligne);
+    
         
-       
-        ticket.push(selected);
-        
-        
-      
     }
     
 
@@ -39,16 +36,16 @@ fetch
 
 <template>
 
-  
+<router-view></router-view>
 
- <select class="form-control" @change="mettreDansTicket" size="5"  v-model="selected">
+ <select class="form-control" @change="mettreDansTicket(selected)" size="5"  v-model="selected">
     <option v-for="prestation in prestations"  :key="prestation.id"> {{ prestation.nom }}  {{ prestation.prix }}Fr</option>
  
 
   </select>
   
-    <select class="form-control" @change="mettreDansTicket" size="5"  v-model="selected">
-    <option v-for="produit in produits"  :key="produit.id" >{{ produit.nom }} Fr</option>
+    <select class="form-control" @change="mettreDansTicket(selected)" size="5"  v-model="selected">
+    <option v-for="produit in produits"  :key="produit.id" >{{ produit.nom }} {{ produit.prixVente }}Fr</option>
  
 
   </select>
@@ -56,12 +53,13 @@ fetch
    <div>Selected: {{ selected }}</div>
         <div>Ticket:{{ ticket }}</div>
 
-      
+ 
+  
 
-<li v-for="prestation in prestations">
+<li v-for="prestation in prestations" :key="prestation.id">
   {{ prestation.nom }} {{ prestation.prix }}Fr
 </li>
-<li v-for="produit in produits"  >{{ produit.nom }} {{ produit.prixVente }}Fr</li>
+<li v-for="produit in produits" :key="produit.id" >{{ produit.nom }} {{ produit.prixVente }}Fr</li>
 {{ prestations.nom }}
        
  {{  }}
